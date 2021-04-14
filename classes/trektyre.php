@@ -79,7 +79,8 @@ class trektyre extends parsing {
                 $name = trim($name);
                 //$name = $brand.' '.$model.' '.$name;
                 $data = self::getDataForTyresForTrektyre($v);
-                $check_el = process::check_and_add_el('Tires', $brand, $model, $name, $data, 'trektyre');
+                $process = new process();
+                $check_el = $process->check_and_add_el('Tires', $brand, $model, $name, $data, 'trektyre');
                 debug::log($check_el, '$check_el');
                 debug::log('---  continue parser tyres trektyre  ---');
             }

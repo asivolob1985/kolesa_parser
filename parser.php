@@ -11,6 +11,7 @@ require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_before.ph
 require_once $_SERVER["DOCUMENT_ROOT"]."/bitrix/php_interface/parser/classes/parsing.php";
 require_once $_SERVER["DOCUMENT_ROOT"]."/bitrix/php_interface/parser/classes/kolesadarom.php";
 require_once $_SERVER["DOCUMENT_ROOT"]."/bitrix/php_interface/parser/classes/trektyre.php";
+require_once $_SERVER["DOCUMENT_ROOT"]."/bitrix/php_interface/parser/classes/fortochki.php";
 require_once $_SERVER["DOCUMENT_ROOT"]."/bitrix/php_interface/parser/classes/debug.php";
 require_once $_SERVER["DOCUMENT_ROOT"]."/bitrix/php_interface/parser/classes/process.php";
 require_once $_SERVER["DOCUMENT_ROOT"]."/bitrix/php_interface/parser/classes/properties.php";
@@ -26,6 +27,7 @@ $start = microtime(true);
 
 $kolesadarom_process = true;
 $trektyre_process = true;
+$fortochki_process = true;
 
 debug::log('*******************************START********************************');
 if ($kolesadarom_process){
@@ -42,10 +44,18 @@ if ($trektyre_process) {
     $trek_check_data = true;
 }
 
-if ($kolesadarom_check_data == false or $trek_check_data == false) {
+if ($fortochki_process) {
+    $parser_data_fortochki = new fortochki();
+    $fortochki_check_data = $parser_data_fortochki->check_data();
+}else{
+    $fortochki_check_data = true;
+}
+
+if ($kolesadarom_check_data == false or $trek_check_data == false or $fortochki_check_data == false) {
     @mail('asivolob1985@gmail.com', 'Error in data for parsing', 'check parsing data!');
     debug::log($kolesadarom_check_data, 'error $kolesadarom_check_data data');
     debug::log($trek_check_data, 'error $trek_check_data data');
+    debug::log($fortochki_check_data, 'error $fortochki_check_data data');
     debug::log('error parsing data');
 
     return false;
@@ -53,6 +63,18 @@ if ($kolesadarom_check_data == false or $trek_check_data == false) {
 
 debug::log('off actitvity');//1-если в массиве есть данные, то убираем активность в битриксе
 properties::fix_code();//костыль для замены кодов
+process::off_activity_type('Tires');
+process::off_activity_type('Rims');
+
+if ($fortochki_process) {
+    $xml = new SimpleXMLElement($parser_data_fortochki->getData());
+    debug::log('---  start parser tyres fortochki  ---');
+    $parser_data_fortochki->parsing_tyres($xml);
+    debug::log('---  end parser tyres fortochki ---');
+    debug::log('---  start parser Rims fortochki  ---');
+    $parser_data_fortochki->parsing_rims($xml);
+    debug::log('---  end parser rims fortochki ---');
+}
 
 if ($kolesadarom_process) {
     $xml = new SimpleXMLElement($parser_data_kolesadarom->getData());
@@ -69,7 +91,6 @@ if ($trektyre_process) {
     debug::log('---  start parser tyres trektyre  ---');
     $parser_data_trek->parsing_tyres($xml);
     debug::log('---  end parser tyres trektyre ---');
-
 }
 
 

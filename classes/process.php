@@ -300,13 +300,10 @@ class process{
                 }else{
                     debug::log('', 'site has no Image');
                 }
-
             }
         }
         $imgid = '';
-	    if($site === 'trektyre'){
-
-        }else{
+	    if($site === 'kolesadarom'){
             $dataf = ['product_id' => $data['product_id']];
             $kd = kd::search('bDOdluITdq9oW405IK_qTfo9dOJYhmgK', $dataf);
             $res = json_decode($kd);
@@ -320,7 +317,6 @@ class process{
                 $url = $res['img_url'];
                 debug::log($url, '$imgurl for kolesadarom');
             }
-            return '';
         }
 
 	    if($url != ''){
@@ -358,8 +354,6 @@ class process{
 
 		return $img_id;
 	}
-
-
 
 	public static function setSale($product_id, $count, $price = false){
 		if(!$count or $count == null){
@@ -408,8 +402,13 @@ class process{
 		return true;
 	}
 
-	public static function check_and_add_el($type, $brand, $model, $name, $data, $site){
+	public function check_and_add_el($type, $brand, $model, $name, $data, $site){
 		debug::log('check_and_add_el');
+		if(parsing::is_repeat_model($type, $data)){
+            debug::log('is_repeat_model = true', 'continue to next model');
+            return [];
+        }
+
 		$brand = mb_strtoupper($brand);
 		$model = mb_strtoupper($model);
 		CModule::IncludeModule("iblock");
@@ -514,7 +513,6 @@ class process{
 		$PROP[212] = $data['sclad'];  //
 
 		$CODE = properties::translit($name);
-
         $picture = self::getImage($el_id, $data['img'], 'tyres', $data, $site, $name);
 
         debug::log($picture, 'picture');

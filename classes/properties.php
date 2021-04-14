@@ -103,7 +103,7 @@ class properties {
 
             $min = min($prices);
 
-            if($site === 'kolesadarom'){
+            if($site === 'kolesadarom' or $site === 'fortochki'){
                 return ($min + ($min*14.5/100));
             }elseif($site === 'trektyre' and $data['sclad'] === 'msc'){
                 return ($min + 350);

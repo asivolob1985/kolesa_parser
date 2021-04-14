@@ -2,6 +2,8 @@
 
 class kolesadarom extends parsing {
 
+    public $exclude_tyres = ['HANKOOK', 'NEXEN'];
+
     public $pathData = 'http://kolesamigom66.ru/parsing/data/catalog.xml';
 
     public static function getDataForTyresForKolesadarom($value) {
@@ -108,7 +110,8 @@ class kolesadarom extends parsing {
             $data = self::getDataForRimsForKolesadarom($v);
             $name = str_replace(['(', ')'], '',  $name);
             $name = str_replace('№', '#', $name);
-            $check_el = process::check_and_add_el('Rims', $brand, $model, $name, $data, 'kolesadarom');
+            $process = new process();
+            $check_el = $process->check_and_add_el('Rims', $brand, $model, $name, $data, 'kolesadarom');
             debug::log($check_el, '$check_el');
             debug::log('---  continue parser rims kolesadarom  ---');
         }
@@ -126,7 +129,7 @@ class kolesadarom extends parsing {
             }
             $articuls[] = $id;
             $brand = (string)mb_strtoupper($v->proizvoditel);
-            if ($brand === 'HANKOOK') {
+            if(in_array($brand, $this->exclude_tyres)){
                 continue;
             }
             debug::log($v);
@@ -134,7 +137,8 @@ class kolesadarom extends parsing {
             $name = (string)$v->name;
             $name = str_replace(['(', ')'], '',  $name);
             $data = self::getDataForTyresForKolesadarom($v);
-            $check_el = process::check_and_add_el('Tires', $brand, $model, $name, $data, 'kolesadarom');
+            $process = new process();
+            $check_el = $process->check_and_add_el('Tires', $brand, $model, $name, $data, 'kolesadarom');
             debug::log($check_el, '$check_el');
             debug::log('---  continue parser tyres kolesadarom  ---');
         }
