@@ -61,7 +61,7 @@ class fortochki extends parsing {
             'bolts_count'   => $value->bolts_count,
             'diameter'      => $value->diameter,
             'cae'           => $value->cae,
-            'price_ekb2'    => $value->price_ekb2,
+            'price_ekb2'    => $value->price_ekb2_rozn,
             'rest_ekb2'     => $rest,
             'sclad'         => 'ekb',
             'rest'          => $rest,
