@@ -6,10 +6,25 @@ class fortochki extends parsing {
 
     public $pathData = 'https://b2b.4tochki.ru/export_data/M20382.xml';
 
+    public static function check_brands($brand) {
+        $res = $brand;
+        $ar = [
+            'K&amp;K' => 'КиК',
+            'Kama' => 'НШЗ',
+
+        ];
+
+        if (isset($ar[$brand])) {
+            $res = $ar[$brand];
+        }
+
+        return $res;
+    }
+
     public static function getDataForTyresForTochki($value) {
         $value = (array)$value;
         $count_ekb = $value['rest_ekb2'];
-        $count_ekb = str_replace(['>','более'], '', $count_ekb);
+        $count_ekb = str_replace(['>', 'более'], '', $count_ekb);
 
         $data = [
             'width'       => $value['width'],
@@ -34,7 +49,7 @@ class fortochki extends parsing {
 
     public static function getDataForRimsForFortochki($value) {
         $rest = $value->rest_ekb2;
-        $rest = str_replace(['>','более'], '', $rest);
+        $rest = str_replace(['>', 'более'], '', $rest);
 
         $data = [
             'width'         => $value->width,
@@ -44,7 +59,7 @@ class fortochki extends parsing {
             'bolts_count'   => $value->bolts_count,
             'diameter'      => $value->diameter,
             'cae'           => $value->cae,
-            'price_ekb2'    => $value->price_ekb2_rozn,
+            'price_ekb2'    => $value->price_ekb2,
             'rest_ekb2'     => $rest,
             'sclad'         => 'ekb',
             'rest'          => $rest,
@@ -58,14 +73,15 @@ class fortochki extends parsing {
 
     public function parsing_tyres($xml) {
         foreach ($xml->tires as $v) {
+            debug::log($v);
+            $v->brand = self::check_brands($v->brand);
             $brand = (string)mb_strtoupper($v->brand);
             if (in_array($brand, $this->exclude_tyres)) {
                 continue;
             }
-            debug::log($v);
             $model = (string)$v->model;
             $name = (string)$v->name;
-            $name = self::revision_name( (string)$v->brand, $model, $name);
+            $name = self::revision_name((string)$v->brand, $model, $name);
             $data = self::getDataForTyresForTochki($v);
             $process = new process();
             $check_el = $process->check_and_add_el('Tires', $brand, $model, $name, $data, 'fortochki');
@@ -78,11 +94,12 @@ class fortochki extends parsing {
 
     public function parsing_rims($xml) {
         foreach ($xml->rims as $v) {
-            debug::log($v, 'value');
+            debug::log($v);
+            $v->brand = self::check_brands($v->brand);
             $brand = (string)mb_strtoupper($v->brand);
             $name = (string)$v->name;
             $model = (string)$v->model;
-            $name = self::revision_name( (string)$v->brand, $model, $name);
+            $name = self::revision_name((string)$v->brand, $model, $name);
             $data = self::getDataForRimsForFortochki($v);
             $process = new process();
             $check_el = $process->check_and_add_el('Rims', $brand, $model, $name, $data, 'fortochki');
@@ -93,7 +110,7 @@ class fortochki extends parsing {
         return true;
     }
 
-    public static function revision_name($brand, $model, $name){
+    public static function revision_name($brand, $model, $name) {
         $new_name = $brand.' '.$model.' ';
         $name = str_replace(['(', ')', $brand, $model], '', $name);
         $name = str_replace('№', '#', $name);
