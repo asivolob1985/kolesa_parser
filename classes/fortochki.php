@@ -11,11 +11,13 @@ class fortochki extends parsing {
         $ar = [
             'K&amp;K' => 'КиК',
             'Kama' => 'НШЗ',
+            'K&K' => 'КиК',
 
         ];
 
         if (isset($ar[$brand])) {
             $res = $ar[$brand];
+            debug::log($res, 'change brand from '.$brand.' on '.$res);
         }
 
         return $res;
@@ -35,7 +37,7 @@ class fortochki extends parsing {
             'season'      => $value['season'],
             'thorn'       => $value['thorn'],
             'cae'         => $value['cae'],
-            'price_ekb2'  => $value['price_ekb2_rozn'],
+            'price_ekb2'  => $value['price_ekb2'],
             'rest_ekb2'   => $count_ekb,
             'sclad'       => 'ekb',
             'rest'        => $count_ekb,

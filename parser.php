@@ -26,8 +26,8 @@ $memory = memory_get_usage();
 $start = microtime(true);
 
 $kolesadarom_process = true;
-$trektyre_process = true;
-$fortochki_process = true;
+$trektyre_process = false;
+$fortochki_process = false;
 
 debug::log('*******************************START********************************');
 if ($kolesadarom_process){
