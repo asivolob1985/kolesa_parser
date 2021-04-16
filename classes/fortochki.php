@@ -44,6 +44,7 @@ class fortochki extends parsing {
             'brand'       => mb_strtoupper(self::check_brands($value['brand'])),
             'model'       => mb_strtoupper($value['model']),
             'img'         => $value['img_big_my'],
+            'name' =>  $value['name'],
         ];
 
         return $data;
@@ -68,6 +69,7 @@ class fortochki extends parsing {
             'brand'         => mb_strtoupper(self::check_brands($value->brand)),
             'model'         => mb_strtoupper($value->model),
             'img'           => $value->img_big_my,
+            'name'           => $value->name,
         ];
 
         return $data;
