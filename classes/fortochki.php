@@ -41,7 +41,7 @@ class fortochki extends parsing {
             'rest_ekb2'   => $count_ekb,
             'sclad'       => 'ekb',
             'rest'        => $count_ekb,
-            'brand'       => mb_strtoupper($value['brand']),
+            'brand'       => mb_strtoupper(self::check_brands($value['brand'])),
             'model'       => mb_strtoupper($value['model']),
             'img'         => $value['img_big_my'],
         ];
@@ -65,7 +65,7 @@ class fortochki extends parsing {
             'rest_ekb2'     => $rest,
             'sclad'         => 'ekb',
             'rest'          => $rest,
-            'brand'         => mb_strtoupper($value->brand),
+            'brand'         => mb_strtoupper(self::check_brands($value->brand)),
             'model'         => mb_strtoupper($value->model),
             'img'           => $value->img_big_my,
         ];
@@ -75,16 +75,15 @@ class fortochki extends parsing {
 
     public function parsing_tyres($xml) {
         foreach ($xml->tires as $v) {
-            debug::log($v);
-            $v->brand = self::check_brands($v->brand);
-            $brand = (string)mb_strtoupper($v->brand);
+            debug::log($v, 'raw data');
+            $data = self::getDataForTyresForTochki($v);
+            $brand = $data['brand'];
+            $model = $data['model'];
+            $name = $data['name'];
             if (in_array($brand, $this->exclude_tyres)) {
                 continue;
             }
-            $model = (string)$v->model;
-            $name = (string)$v->name;
-            $name = self::revision_name((string)$v->brand, $model, $name);
-            $data = self::getDataForTyresForTochki($v);
+            $name = self::revision_name($brand, $model, $name);
             $process = new process();
             $check_el = $process->check_and_add_el('Tires', $brand, $model, $name, $data, 'fortochki');
             debug::log($check_el, '$check_el');
@@ -97,11 +96,11 @@ class fortochki extends parsing {
     public function parsing_rims($xml) {
         foreach ($xml->rims as $v) {
             debug::log($v);
-            $v->brand = self::check_brands($v->brand);
-            $brand = (string)mb_strtoupper($v->brand);
+            $brand = self::check_brands($v->brand);
+            $brand = (string)mb_strtoupper($brand);
             $name = (string)$v->name;
             $model = (string)$v->model;
-            $name = self::revision_name((string)$v->brand, $model, $name);
+            $name = self::revision_name($brand, $model, $name);
             $data = self::getDataForRimsForFortochki($v);
             $process = new process();
             $check_el = $process->check_and_add_el('Rims', $brand, $model, $name, $data, 'fortochki');
