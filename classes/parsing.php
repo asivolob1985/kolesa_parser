@@ -25,6 +25,7 @@ class parsing {
     public static function is_repeat_model($type, $data){
         if($type === 'Tires'){
             $unique = strtolower(trim($data['brand'].$data['model'].$data['width'].$data['height'].$data['diameter'].properties::translit($data['season']).$data['speed_index'].$data['load_index']));
+            $unique = str_replace(['-', '*', 'Winter'], ' ', $unique);
             $unique = str_replace(' ', '', $unique);
             debug::log($unique, 'is_repeat_model $unique');
             if(in_array($unique,  static::$unique_tyres)){
