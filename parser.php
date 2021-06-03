@@ -33,6 +33,7 @@ debug::log('*******************************START********************************
 if ($kolesadarom_process){
     $parser_data_kolesadarom = new kolesadarom();
     $kolesadarom_check_data = $parser_data_kolesadarom->check_data();
+    debug::log($parser_data_kolesadarom->getData(), 'error $kolesadarom_check_data data ERROR');
 }else{
     $kolesadarom_check_data = true;
 }
