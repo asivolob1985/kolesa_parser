@@ -4,7 +4,7 @@ class kolesadarom extends parsing {
 
     public $exclude_tyres = ['HANKOOK', 'NEXEN'];
 
-    public $pathData = 'http://kolesamigom66.ru/parsing/data/catalog.xml';
+    public $pathData = 'https://kolesamigom66.ru/parsing/data/catalog.xml';
 
     public static function getDataForTyresForKolesadarom($value) {
         $value = (array)$value;
