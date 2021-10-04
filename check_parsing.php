@@ -14,7 +14,7 @@ if(!is_file($log_file)){
 
 define('TELEGRAM_TOKEN', '2011696508:AAF4lrCgsrcRI45SfLn19MeOaNVlSeUHq34');
 // сюда нужно вписать ваш внутренний айдишник
-define('TELEGRAM_CHATID', '874356888');
+define('TELEGRAM_CHATID', '-251543225');
 
 message_to_telegram($mess);
 
@@ -36,4 +36,5 @@ function message_to_telegram($text)
         )
     );
     $res = curl_exec($ch);
+
 }
