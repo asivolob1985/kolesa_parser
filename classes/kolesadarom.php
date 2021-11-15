@@ -9,7 +9,13 @@ class kolesadarom extends parsing {
     public static function getDataForTyresForKolesadarom($value) {
         $value = (array)$value;
 
-        if ($value['ship'] === 'Шипованные') {
+        if ($value['ship'] === 'Шипованные') {//оставил для совместимости
+            $ship = 'Да';
+        } else {
+            $ship = '';
+        }
+
+        if ($value['spikes'] === 'Да') {
             $ship = 'Да';
         } else {
             $ship = '';
