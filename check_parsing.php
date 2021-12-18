@@ -8,7 +8,7 @@ if(!is_file($log_file)){
 }else{
     $size = filesize($log_file);
     if($size < 1000 ){
-        $mess = 'Парсинг быз запущен, но не прошел.';
+        $mess = 'Парсинг был запущен, но не прошел.';
     }
 }
 

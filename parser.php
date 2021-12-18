@@ -29,6 +29,8 @@ $kolesadarom_process = true;
 $trektyre_process = true;
 $fortochki_process = true;
 
+debug::clean();
+
 debug::log('*******************************START********************************');
 if ($kolesadarom_process){
     $parser_data_kolesadarom = new kolesadarom();

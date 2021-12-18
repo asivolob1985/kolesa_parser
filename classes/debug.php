@@ -43,5 +43,12 @@ class debug {
         }
         return rmdir($dir);
     }
+
+    public static function clean(){
+        $path = __DIR__.'/debug_logs/'.date('Y-m-d').'/';
+        if(is_dir($path)){
+            self::delTree($path);
+        }
+    }
 }
 
