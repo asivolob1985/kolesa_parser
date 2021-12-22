@@ -21,8 +21,7 @@ class properties {
 	}
 
 	public static function clean_diameter($dia){
-		$dia = str_replace('R', '', $dia);
-		$dia = str_replace('Z', '', $dia);
+		$dia = str_replace(['R', 'Z'], '', $dia);
 
 		return $dia;
 	}
@@ -37,6 +36,12 @@ class properties {
 			if($sklad === 'msc'){
 				$delivery_days = ' 5 дней';
 			}
+		}elseif($site === 'kolesoural'){
+            if($sklad === 'chelyab'){
+                $delivery_days = ' 3 дня';
+            }else{
+                $delivery_days = ' 10 дней';
+            }
 		}
 
 		return $delivery_days;

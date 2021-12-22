@@ -129,8 +129,8 @@ class process{
 		$PROP[170] = $data['et'];  //
 		//$PROP[200] = '';  //
 		$PROP[201] = $data['dia'];  //
-		$PROP[57] = $data['bolts_spacing'];  //
-		$PROP[202] = $data['bolts_count'];
+		$PROP[57] = $data['bolts_spacing'] ?? 0;  //
+		$PROP[202] = $data['bolts_count'] ?? 0;
 		$PROP[59] =  $data['diameter']; //
 		$PROP[51] = mb_strtoupper($data['brand']);  //
 		$PROP[56] = $data['model'];  //
@@ -154,83 +154,31 @@ class process{
 			"DETAIL_PICTURE" => $picture,
 		);
 
-		try{
+        if(in_array($picture["type"], ["inode/x-empty", "text/html"])){
+            unset($arLoadProductArray["DETAIL_PICTURE"]);
+        }
+
+
+        try{
 			$ELID = $el->Update($el_id, $arLoadProductArray);
 		}catch (Exception $e){
-			var_dump($e->getMessage());
+            debug::log($e->getMessage(), 'ERROR in updRim');
 		}
 
 		debug::log($arLoadProductArray, 'updRim');
 		debug::log($ELID, 'updRim');
 
+        if(!is_int($ELID)){
+            debug::log('FAIL updRim');
+        }else{
+            debug::log('SUCCESS updRim');
+        }
+
+
 		return $el_id;
 	}
 
-	public static function newBrand($type, $name){
-		CModule::IncludeModule("iblock");
-		$bs = new CIBlockSection;
-		$arFields = Array(
-			"ACTIVE" => 'Y',
-			"IBLOCK_ID" => process::getIblIdByType($type),
-			"NAME" => mb_strtoupper($name),
-			"CODE" => properties::translit($name),
-		);
 
-		debug::log($arFields, 'newBrand');
-		$id = $bs->Add($arFields);
-		return $id;
-	}
-
-	public static function newModel($type, $name, $brand_id, $brand_name){
-		CModule::IncludeModule("iblock");
-		$bs = new CIBlockSection;
-		$arFields = Array(
-			"ACTIVE" => 'Y',
-			"IBLOCK_SECTION_ID" => $brand_id,
-			"IBLOCK_ID" => process::getIblIdByType($type),
-			"NAME" => properties::sanitar_name($name),
-			"CODE" => properties::translit($brand_name).'_'.properties::translit($name),
-		);
-		debug::log($arFields, 'newModel');
-		$id = $bs->Add($arFields);
-		return $id;
-	}
-
-	public static function findEl($type, $brand, $model, $name){
-		CModule::IncludeModule("iblock");
-		debug::log([$type, $brand, $model, $name], 'findEl');
-		CModule::IncludeModule("iblock");
-		$infoblock = self::getIblIdByType($type);
-		debug::log($brand, 'search brand by name');
-		$rs_Section_brand = CIBlockSection::GetList([], ['IBLOCK_ID' => $infoblock, 'NAME' => $brand], 1);
-		if ($ar_Section_brand = $rs_Section_brand->Fetch() ){
-			$brand_id = $ar_Section_brand['ID'];//21422-pirelli
-			$code_for_model = properties::translit($brand).'_'.properties::translit($model);
-			debug::log($code_for_model, 'search model by code');
-			$rs_Section_model = CIBlockSection::GetList([], ['IBLOCK_ID' => $infoblock, 'CODE' => $code_for_model], 1);
-			if ($ar_Section_model = $rs_Section_model->Fetch() ){
-				$model_id = $ar_Section_model['ID'];
-				$search_name = $name;
-				debug::log($search_name, 'search name prod by name');
-				$arFields = ['IBLOCK_ID' => $infoblock, 'NAME' => $search_name];
-				if($type === 'Tires'){
-					$arFields['!PROPERTY_hand_product'] = '234';
-				}
-				debug::log($arFields, '$arFields');
-				$rs_el = CIBlockElement::GetList([], $arFields);
-				if ($ar_el = $rs_el->Fetch() ){
-					$name_id = $ar_el['ID'];
-					return ['model' => $model_id, 'brand' => $brand_id, 'name' => $name_id, 'bx_data' => $ar_el];
-				}else{
-					return ['model' => $model_id, 'brand' => $brand_id, 'name' => false];
-				}
-			}else{
-				return ['model' => false, 'brand' => $brand_id, 'name' => false];
-			}
-		}else{
-			return ['model' => false, 'brand' => false, 'name' => false];
-		}
-	}
 
 	public static function newRim($brand, $model, $name, $data, $site){
 		CModule::IncludeModule("iblock");
@@ -240,8 +188,8 @@ class process{
 		$PROP[170] = $data['et'];  //
 		//$PROP[200] = '';  //
 		$PROP[201] = $data['dia'];  //
-		$PROP[57] = $data['bolts_spacing'];  //
-		$PROP[202] = $data['bolts_count'];
+		$PROP[57] = $data['bolts_spacing'] ?? 0; //
+		$PROP[202] = $data['bolts_count'] ?? 0;
 		$PROP[59] =  $data['diameter']; //
 		$PROP[51] = mb_strtoupper($data['brand']);  //
 		$PROP[56] = $data['model'];  //
@@ -265,17 +213,92 @@ class process{
 			"DETAIL_PICTURE" => $picture,
 		);
 
+		if(in_array($picture["type"], ["inode/x-empty", "text/html"])){
+		    unset($arLoadProductArray["DETAIL_PICTURE"]);
+        }
+
 		try{
 			$ELID = $el->Add($arLoadProductArray);
 		}catch (Exception $e){
-			var_dump($e->getMessage());
+            debug::log($e->getMessage(), 'ERROR newRim');
 		}
 
 		debug::log($arLoadProductArray, 'newRim');
 		debug::log($ELID, 'newRim');
+		if(!is_int($ELID)){
+            debug::log('FAIL newRim');
+        }else{
+            debug::log('SUCCESS newRim');
+        }
 
 		return $ELID;
 	}
+
+    public static function newBrand($type, $name){
+        CModule::IncludeModule("iblock");
+        $bs = new CIBlockSection;
+        $arFields = Array(
+            "ACTIVE" => 'Y',
+            "IBLOCK_ID" => process::getIblIdByType($type),
+            "NAME" => mb_strtoupper($name),
+            "CODE" => properties::translit($name),
+        );
+
+        debug::log($arFields, 'newBrand');
+        $id = $bs->Add($arFields);
+        return $id;
+    }
+
+    public static function newModel($type, $name, $brand_id, $brand_name){
+        CModule::IncludeModule("iblock");
+        $bs = new CIBlockSection;
+        $arFields = Array(
+            "ACTIVE" => 'Y',
+            "IBLOCK_SECTION_ID" => $brand_id,
+            "IBLOCK_ID" => process::getIblIdByType($type),
+            "NAME" => properties::sanitar_name($name),
+            "CODE" => properties::translit($brand_name).'_'.properties::translit($name),
+        );
+        debug::log($arFields, 'newModel');
+        $id = $bs->Add($arFields);
+        return $id;
+    }
+
+    public static function findEl($type, $brand, $model, $name){
+        CModule::IncludeModule("iblock");
+        debug::log([$type, $brand, $model, $name], 'findEl');
+        CModule::IncludeModule("iblock");
+        $infoblock = self::getIblIdByType($type);
+        debug::log($brand, 'search brand by name');
+        $rs_Section_brand = CIBlockSection::GetList([], ['IBLOCK_ID' => $infoblock, 'NAME' => $brand], 1);
+        if ($ar_Section_brand = $rs_Section_brand->Fetch() ){
+            $brand_id = $ar_Section_brand['ID'];//21422-pirelli
+            $code_for_model = properties::translit($brand).'_'.properties::translit($model);
+            debug::log($code_for_model, 'search model by code');
+            $rs_Section_model = CIBlockSection::GetList([], ['IBLOCK_ID' => $infoblock, 'CODE' => $code_for_model], 1);
+            if ($ar_Section_model = $rs_Section_model->Fetch() ){
+                $model_id = $ar_Section_model['ID'];
+                $search_name = $name;
+                debug::log($search_name, 'search name prod by name');
+                $arFields = ['IBLOCK_ID' => $infoblock, 'NAME' => $search_name];
+                if($type === 'Tires'){
+                    $arFields['!PROPERTY_hand_product'] = '234';
+                }
+                debug::log($arFields, '$arFields');
+                $rs_el = CIBlockElement::GetList([], $arFields);
+                if ($ar_el = $rs_el->Fetch() ){
+                    $name_id = $ar_el['ID'];
+                    return ['model' => $model_id, 'brand' => $brand_id, 'name' => $name_id, 'bx_data' => $ar_el];
+                }else{
+                    return ['model' => $model_id, 'brand' => $brand_id, 'name' => false];
+                }
+            }else{
+                return ['model' => false, 'brand' => $brand_id, 'name' => false];
+            }
+        }else{
+            return ['model' => false, 'brand' => false, 'name' => false];
+        }
+    }
 
 	public static function trim($text){
 		return str_replace(' ', '', $text);
@@ -463,7 +486,7 @@ class process{
 				$el_id = self::newRim($brand_id, $model_id, $name, $data, $site);
 			}
 			if(!$el_id){
-				debug::log('ERR create tire2');
+				debug::log('ERR create tovar');
 				//die('ERR create tire2');
 			}
 		}else{

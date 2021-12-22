@@ -12,6 +12,7 @@ require_once $_SERVER["DOCUMENT_ROOT"]."/bitrix/php_interface/parser/classes/par
 require_once $_SERVER["DOCUMENT_ROOT"]."/bitrix/php_interface/parser/classes/kolesadarom.php";
 require_once $_SERVER["DOCUMENT_ROOT"]."/bitrix/php_interface/parser/classes/trektyre.php";
 require_once $_SERVER["DOCUMENT_ROOT"]."/bitrix/php_interface/parser/classes/fortochki.php";
+require_once $_SERVER["DOCUMENT_ROOT"]."/bitrix/php_interface/parser/classes/kolesoural.php";
 require_once $_SERVER["DOCUMENT_ROOT"]."/bitrix/php_interface/parser/classes/debug.php";
 require_once $_SERVER["DOCUMENT_ROOT"]."/bitrix/php_interface/parser/classes/process.php";
 require_once $_SERVER["DOCUMENT_ROOT"]."/bitrix/php_interface/parser/classes/properties.php";
@@ -28,6 +29,7 @@ $start = microtime(true);
 $kolesadarom_process = true;
 $trektyre_process = true;
 $fortochki_process = true;
+$kolesoural_process = true;
 
 debug::clean();
 
@@ -35,7 +37,6 @@ debug::log('*******************************START********************************
 if ($kolesadarom_process){
     $parser_data_kolesadarom = new kolesadarom();
     $kolesadarom_check_data = $parser_data_kolesadarom->check_data();
-    debug::log($parser_data_kolesadarom->getData(), 'error $kolesadarom_check_data data ERROR');
 }else{
     $kolesadarom_check_data = true;
 }
@@ -54,11 +55,20 @@ if ($fortochki_process) {
     $fortochki_check_data = true;
 }
 
-if ($kolesadarom_check_data == false or $trek_check_data == false or $fortochki_check_data == false) {
+if ($kolesoural_process) {
+    $parser_data_kolesoural = new kolesoural();
+    $kolesoural_check_data = $parser_data_kolesoural->check_data();
+}else{
+    $kolesoural_check_data = true;
+}
+
+debug::log('checks');
+if ($kolesadarom_check_data === false or $trek_check_data === false or $fortochki_check_data === false or $kolesoural_check_data === false) {
     @mail('asivolob1985@gmail.com', 'Error in data for parsing', 'check parsing data!');
     debug::log($kolesadarom_check_data, 'error $kolesadarom_check_data data');
     debug::log($trek_check_data, 'error $trek_check_data data');
     debug::log($fortochki_check_data, 'error $fortochki_check_data data');
+    debug::log($kolesoural_check_data, 'error $kolesoural_check_data data');
     debug::log('error parsing data');
 
     return false;
@@ -94,6 +104,13 @@ if ($trektyre_process) {
     debug::log('---  start parser tyres trektyre  ---');
     $parser_data_trek->parsing_tyres($xml);
     debug::log('---  end parser tyres trektyre ---');
+}
+
+if($kolesoural_process){
+    $xml = new SimpleXMLElement($parser_data_kolesoural->getData());
+    debug::log('---  start parser rims kolesoural  ---');
+    $parser_data_kolesoural->parsing_rims($xml);
+    debug::log('---  end parser rims kolesoural ---');
 }
 
 

@@ -9,11 +9,13 @@ class parsing {
     }
 
     public function __construct() {
+        debug::log($this->pathData, '$pathData');
         $this->sourceData = file_get_contents($this->pathData);
+        debug::log(strlen($this->sourceData), 'strlen');
     }
 
     public function check_data(){
-        if ((strpos($this->sourceData, '<?xml') !== false)) {
+        if ((mb_strpos($this->sourceData, '<?xml') !== false)) {
             return true;
         }
         return false;
