@@ -29,13 +29,17 @@ class kolesoural extends parsing {
            $sclad = 'd10sclad';
        }
 
+        $blts = $value['pcd'];
+        $blts_ar = explode('x', $blts);
+        $bolts_count = $blts_ar[0];
+        $bolts_spacing = $blts_ar[1];
 
         $data = [
             'width'         => $value['width'],
             'et'            => $value['et'],
             'dia'           => $value['dia'],
-//            'bolts_spacing' => '',
-//            'bolts_count'   => '',
+            'bolts_spacing' => $bolts_spacing,
+            'bolts_count'   => $bolts_count,
             'diameter'      => $value['diameter'],
             'cae'           => $value['code'],
 
