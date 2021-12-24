@@ -35,7 +35,7 @@ class kolesoural extends parsing {
         $bolts_spacing = $blts_ar[1];
 
         $data = [
-            'width'         => $value['width'],
+            'width'         => (integer)$value['width'],
             'et'            => $value['et'],
             'dia'           => $value['dia'],
             'bolts_spacing' => $bolts_spacing,
