@@ -154,7 +154,7 @@ class process{
 			"DETAIL_PICTURE" => $picture,
 		);
 
-        if(in_array($picture["type"], ["inode/x-empty", "text/html"])){
+        if(in_array($picture["type"], ["inode/x-empty", "text/html"]) or is_int($picture)){
             unset($arLoadProductArray["DETAIL_PICTURE"]);
         }
 
