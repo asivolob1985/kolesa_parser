@@ -35,6 +35,6 @@ function message_to_telegram($text)
             ),
         )
     );
-    $res = curl_exec($ch);
+  // $res = curl_exec($ch);
 
 }
