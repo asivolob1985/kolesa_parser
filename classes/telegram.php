@@ -3,7 +3,7 @@
 class telegram {
 
     protected $chatID = '874356888';
-    protected $token = '2011696508:AAF4lrCgsrcRI45SfLn19MeOaNVlSeUHq34';
+    protected $token = '5007239054:AAHZOA6f0rWKjjPer8dBAsYsrVXIW4bGhNY';
 
     public function message_to_telegram($text) {
         $this->sendMessage($text);
