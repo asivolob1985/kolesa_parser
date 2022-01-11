@@ -88,7 +88,7 @@ class fortochki extends parsing {
             $name = self::revision_name($brand, $model, $name);
             $process = new process();
             $check_el = $process->check_and_add_el('Tires', $brand, $model, $name, $data, 'fortochki');
-            debug::log($check_el, '$check_el');
+           
             debug::log('---  continue parser tyres fortochki  ---');
         }
 
@@ -106,7 +106,7 @@ class fortochki extends parsing {
             $data = self::getDataForRimsForFortochki($v);
             $process = new process();
             $check_el = $process->check_and_add_el('Rims', $brand, $model, $name, $data, 'fortochki');
-            debug::log($check_el, '$check_el');
+           
             debug::log('---  continue parser rims fortochki  ---');
         }
 

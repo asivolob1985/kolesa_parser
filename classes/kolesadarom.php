@@ -118,7 +118,7 @@ class kolesadarom extends parsing {
             $name = str_replace('№', '#', $name);
             $process = new process();
             $check_el = $process->check_and_add_el('Rims', $brand, $model, $name, $data, 'kolesadarom');
-            debug::log($check_el, '$check_el');
+           
             debug::log('---  continue parser rims kolesadarom  ---');
         }
         unset($articuls);
@@ -145,7 +145,7 @@ class kolesadarom extends parsing {
             $data = self::getDataForTyresForKolesadarom($v);
             $process = new process();
             $check_el = $process->check_and_add_el('Tires', $brand, $model, $name, $data, 'kolesadarom');
-            debug::log($check_el, '$check_el');
+           
             debug::log('---  continue parser tyres kolesadarom  ---');
         }
         unset($articuls);

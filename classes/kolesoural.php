@@ -77,7 +77,7 @@ class kolesoural extends parsing {
             $name = str_replace('№', '#', $name);
             $process = new process();
             $check_el = $process->check_and_add_el('Rims', $brand, $model, $name, $data, 'kolesoural');
-            debug::log($check_el, '$check_el');
+           
             debug::log('---  continue parser rims kolesoural  ---');
         }
         unset($articuls);
