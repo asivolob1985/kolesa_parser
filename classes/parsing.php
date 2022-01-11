@@ -3,6 +3,7 @@
 class parsing {
 
     private $sourceData;
+    public $dataLength;
 
     public function getData(){
         return $this->sourceData;
@@ -12,6 +13,7 @@ class parsing {
         debug::log($this->pathData, '$pathData');
         $this->sourceData = file_get_contents($this->pathData);
         debug::log(strlen($this->sourceData), 'strlen');
+        $this->dataLength = strlen($this->sourceData);
     }
 
     public function check_data(){

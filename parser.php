@@ -41,6 +41,7 @@ if ($kolesadarom_process){
     $parser_data_kolesadarom = new kolesadarom();
     $kolesadarom_check_data = $parser_data_kolesadarom->check_data();
     $telegram->message_to_telegram('$kolesadarom_check_data='.$kolesadarom_check_data);
+    $telegram->message_to_telegram('$kolesadarom_datalen='.$parser_data_kolesadarom->dataLength);
 }else{
     $kolesadarom_check_data = true;
 }
@@ -49,6 +50,7 @@ if ($trektyre_process) {
     $parser_data_trek = new trektyre();
     $trek_check_data = $parser_data_trek->check_data();
     $telegram->message_to_telegram('$trek_check_data='.$trek_check_data);
+    $telegram->message_to_telegram('$trek_datalen='.$parser_data_trek->dataLength);
 }else{
     $trek_check_data = true;
 }
@@ -57,6 +59,7 @@ if ($fortochki_process) {
     $parser_data_fortochki = new fortochki();
     $fortochki_check_data = $parser_data_fortochki->check_data();
     $telegram->message_to_telegram('$fortochki_check_data='.$fortochki_check_data);
+    $telegram->message_to_telegram('$fortochki_datalen='.$parser_data_fortochki->dataLength);
 }else{
     $fortochki_check_data = true;
 }
@@ -65,6 +68,7 @@ if ($kolesoural_process) {
     $parser_data_kolesoural = new kolesoural();
     $kolesoural_check_data = $parser_data_kolesoural->check_data();
     $telegram->message_to_telegram('$kolesoural_check_data='.$kolesoural_check_data);
+    $telegram->message_to_telegram('$kolesoural_datalen='.$parser_data_kolesoural->dataLength);
 }else{
     $kolesoural_check_data = true;
 }
