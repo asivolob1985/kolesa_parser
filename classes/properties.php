@@ -103,7 +103,7 @@ class properties {
                 $price = min($prices);
                 //определяем наценку на бренды
                 $extra = 500;//наценка
-                $brands = ['FR REPLICA', 'ZIXI', 'КИК', 'PDW', 'СКАД'];
+                $brands = ['FR REPLICA', 'ZIXI', 'КИК', 'PDW', 'СКАД', 'K&K REPLICA', 'K&K IFREE'];
                 if(in_array($data['brand'], $brands)){
                     $price = $price+$extra;
                 }
