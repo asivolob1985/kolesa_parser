@@ -97,7 +97,18 @@ class properties {
                     $prices[] = $data[$sklad];
                 }
             }
-            return min($prices);
+            if($site !== 'kolesoural'){
+                return min($prices);
+            }else{
+                $price = min($prices);
+                //определяем наценку на бренды
+                $extra = 500;//наценка
+                $brands = ['FR REPLICA', 'ZIXI', 'КИК', 'PDW', 'СКАД'];
+                if(in_array($data['brand'], $brands)){
+                    $price = $price+$extra;
+                }
+                return $price;
+            }
         }else{
             $sklads = ['price_ekb2', 'price_tyumen', 'price_chelyab'];
             foreach($sklads as $sklad){

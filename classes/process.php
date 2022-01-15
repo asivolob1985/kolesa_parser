@@ -121,7 +121,6 @@ class process{
 
 	public static function updRim($el_id, $brand, $model, $name, $data, $site){
 		debug::log('updRim', 'updRim');
-		debug::log($data, '$data');
 		CModule::IncludeModule("iblock");
 		$el = new CIBlockElement;
 		$PROP = array();
@@ -167,13 +166,6 @@ class process{
 
 		debug::log($arLoadProductArray, 'updRim');
 		debug::log($ELID, 'updRim');
-
-        if(!is_int($ELID)){
-            debug::log('FAIL updRim');
-        }else{
-            debug::log('SUCCESS updRim');
-        }
-
 
 		return $el_id;
 	}
