@@ -102,11 +102,13 @@ class properties {
             }else{
                 $price = min($prices);
                 //определяем наценку на бренды
-                $extra = 500;//наценка
-                $brands = ['LS', 'REPLAY'];
-                if(!in_array($data['brand'], $brands)){
-                    $price = $price+$extra;
+                $brands_without_extra = ['LS', 'REPLAY'];
+                if($data['brand'] === 'TECHLINE'){
+                    $price = $price + ($price*18/100);
+                }elseif(!in_array($data['brand'], $brands_without_extra) and $price != ''){
+                    $price = $price+500;
                 }
+
                 return $price;
             }
         }else{

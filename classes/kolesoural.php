@@ -33,6 +33,10 @@ class kolesoural extends parsing {
         $blts_ar = explode('x', $blts);
         $bolts_count = $blts_ar[0];
         $bolts_spacing = $blts_ar[1];
+        $price = str_replace([' ', ' '], '', $value['RRCprice']);
+        if($price == ''){
+            $price = str_replace([' ', ' '], '', $value['PTRprice']);
+        }
 
         $data = [
             'width'         => $value['width'],
@@ -42,14 +46,10 @@ class kolesoural extends parsing {
             'bolts_count'   => $bolts_count,
             'diameter'      => $value['diameter'],
             'cae'           => $value['code'],
-
-            'price_ekb2'    => str_replace([' ', ' '], '', $value['RRCprice']),
-
+            'price_ekb2'    => $price,
             'rest_ekb2'     => $value['CLBcount'],
-
             'sclad'         => $sclad,
             'rest'          => max($value['CLBcount'], $value['D10count'], $value['NSKcount'], $value['TLTcount']),
-
             'brand'         => mb_strtoupper(self::check_brands($value['brand'])),
             'model'         => mb_strtoupper($value['model']),
             'img'           => $value['image'],
