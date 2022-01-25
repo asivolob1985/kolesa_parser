@@ -38,6 +38,7 @@ class fortochki extends parsing {
             'thorn'       => $value['thorn'],
             'cae'         => $value['cae'],
             'price_ekb2'  => $value['price_ekb2'],
+            'rrc'  => $value['price_ekb2_rozn'],
             'rest_ekb2'   => $count_ekb,
             'sclad'       => 'ekb',
             'rest'        => $count_ekb,

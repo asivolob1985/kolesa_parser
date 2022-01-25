@@ -419,6 +419,7 @@ class process{
 
 	public function check_and_add_el($type, $brand, $model, $name, $data, $site){
 		debug::log('check_and_add_el');
+        debug::log($data, '$data');
 		if(parsing::is_repeat_model($type, $data)){
             debug::log('is_repeat_model = true', 'continue to next model');
             return [];

@@ -120,9 +120,14 @@ class properties {
             }
 
             $min = min($prices);
+            $rrc = $data['rrc'];
 
             if($site === 'kolesadarom' or $site === 'fortochki'){
-                return ($min + ($min*14.5/100));
+                if( (mb_strpos($data['model'], 'NORDMAN') !== false) or ($data['brand'] === 'NORDMAN') ){
+                    return $rrc;
+                }else{
+                    return ($min + ($min*14.5/100));
+                }
             }elseif($site === 'trektyre' and $data['sclad'] === 'msc'){
                 return ($min + 350);
             }else{

@@ -50,6 +50,7 @@ class kolesadarom extends parsing {
             'price_chelyab' => $value['priceOpt'],
             'rest_ekb2'     => $value['stock224'],//екб
             'rest_chelny'   => $value['stock109'],//челны
+            'rrc'           => $value['price'],//челны
             'sclad'         => $res_sclad,
             'rest'          => $rest,
             'brand'         => mb_strtoupper($value['maker']),
@@ -114,11 +115,11 @@ class kolesadarom extends parsing {
             $name = (string)$v->name;
             $model = properties::getModel($name);
             $data = self::getDataForRimsForKolesadarom($v);
-            $name = str_replace(['(', ')'], '',  $name);
+            $name = str_replace(['(', ')'], '', $name);
             $name = str_replace('№', '#', $name);
             $process = new process();
             $check_el = $process->check_and_add_el('Rims', $brand, $model, $name, $data, 'kolesadarom');
-           
+
             debug::log('---  continue parser rims kolesadarom  ---');
         }
         unset($articuls);
@@ -135,17 +136,17 @@ class kolesadarom extends parsing {
             }
             $articuls[] = $id;
             $brand = (string)mb_strtoupper($v->proizvoditel);
-            if(in_array($brand, $this->exclude_tyres)){
+            if (in_array($brand, $this->exclude_tyres)) {
                 continue;
             }
             debug::log($v);
             $model = (string)$v->categoryname;
             $name = (string)$v->name;
-            $name = str_replace(['(', ')'], '',  $name);
+            $name = str_replace(['(', ')'], '', $name);
             $data = self::getDataForTyresForKolesadarom($v);
             $process = new process();
             $check_el = $process->check_and_add_el('Tires', $brand, $model, $name, $data, 'kolesadarom');
-           
+
             debug::log('---  continue parser tyres kolesadarom  ---');
         }
         unset($articuls);

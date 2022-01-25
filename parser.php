@@ -87,10 +87,14 @@ if ($kolesadarom_check_data === false or $trek_check_data === false or $fortochk
     return false;
 }
 
+$telegram->message_to_telegram('start off actitvity');
+
 debug::log('off actitvity');//1-если в массиве есть данные, то убираем активность в битриксе
 properties::fix_code();//костыль для замены кодов
 process::off_activity_type('Tires');
 process::off_activity_type('Rims');
+
+$telegram->message_to_telegram('end off actitvity');
 
 if ($fortochki_process) {
     $xml = new SimpleXMLElement($parser_data_fortochki->getData());
