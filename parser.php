@@ -138,7 +138,22 @@ if($kolesoural_process){
     $telegram->message_to_telegram('end parser rims kolesoural');
 }
 
-$telegram->message_to_telegram('parsing done');
+$telegram->message_to_telegram('parsing done, make xml');
+
+$ch = curl_init();
+// set URL and other appropriate options
+curl_setopt($ch, CURLOPT_URL, 'https://kolesamigom66.ru/y-market/index.php');
+curl_setopt($ch, CURLOPT_HEADER, 0);
+curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
+curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+curl_setopt($ch, CURLOPT_MAXREDIRS, 40);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
+curl_setopt($ch, CURLOPT_POST, 0);
+// grab URL and pass it to the browser
+$res = curl_exec($ch);
+// close cURL resource, and free up system resources
+curl_close($ch);
 
 debug::log('---  end parsing  ---');
 $time = (microtime(true) - $start) / 60;
@@ -153,5 +168,8 @@ $name = ['байт', 'КБ', 'МБ'];
 debug::log($time.' min.   ####  ');
 debug::log(round($memory, 2).' '.$name[$i]);
 debug::log('******************************************************************');
+
+$telegram->message_to_telegram("MEMORY =  ".round($memory, 2).' '.$name[$i]);
 $telegram->message_to_telegram("END PARSING to ".$time." min");
+
 echo date('d.m.Y H:i:s')."  END PARSING to ".$time." min\r\n";
