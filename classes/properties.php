@@ -123,7 +123,7 @@ class properties {
             $rrc = $data['rrc'];
 
             if($site === 'kolesadarom' or $site === 'fortochki'){
-                if( (mb_strpos($data['model'], 'NORDMAN') !== false) or ($data['brand'] === 'NORDMAN') ){
+                if( ($data['brand'] === 'NOKIAN') or ($data['brand'] === 'NORDMAN') ){
                     return $rrc;
                 }else{
                     return ($min + ($min*14.5/100));
