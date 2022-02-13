@@ -103,8 +103,10 @@ class properties {
                 $price = min($prices);
                 //определяем наценку на бренды
                 $brands_without_extra = ['LS', 'REPLAY'];
-                if($data['brand'] === 'TECHLINE'){
-                    $price = $price + ($price*18/100);
+                if($data['brand'] === 'TECHLINE') {
+                    $price = $price + ($price * 18 / 100);
+                }elseif($data['brand'] === 'ZIXI'){
+                    $price = $price+2000;
                 }elseif(!in_array($data['brand'], $brands_without_extra) and $price != ''){
                     $price = $price+500;
                 }
