@@ -50,7 +50,7 @@ class trektyre extends parsing {
             'season'      => $season,
             'thorn'       => $ship,
             'cae'         => $value['cae'],
-            'price_ekb2'  => $value['rs'],
+            'price_ekb2'  => $value['price'],
             'rest_ekb2'   => $value['StockEkb'],
             'rest_msc'    => $value['StockOrder'],
             'sclad'       => $res_sclad,

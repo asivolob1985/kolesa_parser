@@ -126,8 +126,8 @@ class properties {
 
             if($site === 'kolesadarom' or $site === 'fortochki'){
                 return $rrc;
-            }elseif($site === 'trektyre' and $data['sclad'] === 'msc'){
-                return ($min + 350);
+            }elseif($site === 'trektyre'){
+                return ($min + ($min*20/100));
             }else{
                 return $min;
             }
