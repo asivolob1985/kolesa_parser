@@ -2,7 +2,7 @@
 
 class fortochki extends parsing {
 
-    public $exclude_tyres = ['HANKOOK', 'NEXEN'];
+    public $exclude_tyres = [];
 
     public $pathData = 'https://b2b.4tochki.ru/export_data/M20382.xml';
 

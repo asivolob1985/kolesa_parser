@@ -28,7 +28,7 @@ $memory = memory_get_usage();
 $start = microtime(true);
 
 $kolesadarom_process = true;
-$trektyre_process = true;
+$trektyre_process = false;
 $fortochki_process = true;
 $kolesoural_process = true;
 
