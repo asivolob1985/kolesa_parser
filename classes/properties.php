@@ -60,7 +60,7 @@ class properties {
                 'sk18' => '13 дней',
                 'sk4' => '15 дней',
             ];
-            $delivery_days = ' '.$sclads[$sklad];
+            $delivery_days = $sclads[$sklad];
         }
 
 		return $delivery_days;
