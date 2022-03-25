@@ -43,6 +43,11 @@ class properties {
                 $delivery_days = ' 10 дней';
             }
 		}elseif($site === 'fortochki'){
+		    if($sklad === 'ekb2'){
+		        return '';
+            }
+
+
             $sclads = [
                // 'ekb2' => '0',
                 'sk10' => '3 дня',
