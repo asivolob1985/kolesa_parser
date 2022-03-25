@@ -42,7 +42,21 @@ class properties {
             }else{
                 $delivery_days = ' 10 дней';
             }
-		}
+		}elseif($site === 'fortochki'){
+            $sclads = [
+               // 'ekb2' => '0',
+                'sk10' => '3 дня',
+                'SKLAD12' => '5 дней',
+                'sk19' => '6 дней',
+                'yamka' => '7 дней',
+                'sk2' => '10 дней',
+                'sk3' => '10 дней',
+                'sk7' => '11 дней',
+                'sk18' => '13 дней',
+                'sk4' => '15 дней',
+            ];
+            $delivery_days = ' '.$sclads[$sklad];
+        }
 
 		return $delivery_days;
 	}
@@ -91,12 +105,17 @@ class properties {
 
     public static function getPrice($type, $data, $site){
         if($type === 'Rims'){
-            $sklads = ['price_ekb2', 'price_tyumen', 'price_chelyab'];
-            foreach($sklads as $sklad){
-                if(isset($data[$sklad]) and $data[$sklad] > 0){
-                    $prices[] = $data[$sklad];
+            if($site === 'fortochki'){
+                $prices[] = $data['rrc'];
+            }else{
+                $sklads = ['price_ekb2', 'price_tyumen', 'price_chelyab'];
+                foreach($sklads as $sklad){
+                    if(isset($data[$sklad]) and $data[$sklad] > 0){
+                        $prices[] = $data[$sklad];
+                    }
                 }
             }
+
             if($site !== 'kolesoural'){
                 return min($prices);
             }else{

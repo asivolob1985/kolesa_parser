@@ -25,8 +25,14 @@ class fortochki extends parsing {
 
     public static function getDataForTyresForTochki($value) {
         $value = (array)$value;
-        $count_ekb = $value['rest_ekb2'];
-        $count_ekb = str_replace(['>', 'более'], '', $count_ekb);
+        $sclad_data = self::getSclad($value);
+        $tag = $sclad_data['tag'];
+        $delivery_days = $sclad_data['delivery'];
+        $count_tag = 'rest_'.$tag;
+
+        $count = $value[$count_tag];
+        $count = str_replace(['>', 'более'], '', $count);
+        $rrc = $value['price_'.$tag.'_rozn'];
 
         $data = [
             'width'       => $value['width'],
@@ -37,40 +43,48 @@ class fortochki extends parsing {
             'season'      => $value['season'],
             'thorn'       => $value['thorn'],
             'cae'         => $value['cae'],
-            'price_ekb2'  => $value['price_ekb2'],
-            'rrc'  => $value['price_ekb2_rozn'],
-            'rest_ekb2'   => $count_ekb,
-            'sclad'       => 'ekb',
-            'rest'        => $count_ekb,
             'brand'       => mb_strtoupper(self::check_brands($value['brand'])),
             'model'       => mb_strtoupper($value['model']),
             'img'         => $value['img_big_my'],
             'name' =>  $value['name'],
+            //доставка и цена
+            'rrc'  => $rrc,
+            'sclad'       => $tag,
+            'rest'        => $count,//Конечный тег. он используется в системе и на сайте
+            'delivery_days' => $delivery_days,
         ];
 
         return $data;
     }
 
     public static function getDataForRimsForFortochki($value) {
-        $rest = $value->rest_ekb2;
-        $rest = str_replace(['>', 'более'], '', $rest);
+        $value = (array)$value;
+        $sclad_data = self::getSclad($value);
+        $tag = $sclad_data['tag'];
+        $delivery_days = $sclad_data['delivery'];
+        $count_tag = 'rest_'.$tag;
+
+        $count = $value[$count_tag];
+        $count = str_replace(['>', 'более'], '', $count);
+        $rrc = $value['price_'.$tag.'_rozn'];
 
         $data = [
-            'width'         => $value->width,
-            'et'            => $value->et,
-            'dia'           => $value->dia,
-            'bolts_spacing' => $value->bolts_spacing,
-            'bolts_count'   => $value->bolts_count,
-            'diameter'      => $value->diameter,
-            'cae'           => $value->cae,
-            'price_ekb2'    => $value->price_ekb2_rozn,
-            'rest_ekb2'     => $rest,
-            'sclad'         => 'ekb',
-            'rest'          => $rest,
-            'brand'         => mb_strtoupper(self::check_brands($value->brand)),
-            'model'         => mb_strtoupper($value->model),
-            'img'           => $value->img_big_my,
-            'name'           => $value->name,
+            'width'         => $value['width'],
+            'et'            => $value['et'],
+            'dia'           => $value['dia'],
+            'bolts_spacing' => $value['bolts_spacing'],
+            'bolts_count'   => $value['bolts_count'],
+            'diameter'      => $value['diameter'],
+            'cae'           => $value['cae'],
+            'brand'         => mb_strtoupper(self::check_brands($value['brand'])),
+            'model'         => mb_strtoupper($value['model']),
+            'img'           => $value['img_big_my'],
+            'name'           => $value['name'],
+            //доставка и цена
+            'rrc'  => $rrc,
+            'sclad'       => $tag,
+            'rest'        => $count,//Конечный тег. он используется в системе и на сайте
+            'delivery_days' => $delivery_days,
         ];
 
         return $data;
@@ -99,6 +113,12 @@ class fortochki extends parsing {
     public function parsing_rims($xml) {
         foreach ($xml->rims as $v) {
             debug::log($v);
+            $data = (array)$v;
+            $checkSclad = self::checkScladForRims($data);
+            if(!$checkSclad){
+                debug::log('пропуск элемента из-за склада');
+                continue;
+            }
             $brand = self::check_brands($v->brand);
             $brand = (string)mb_strtoupper($brand);
             $name = (string)$v->name;
@@ -109,6 +129,14 @@ class fortochki extends parsing {
             $check_el = $process->check_and_add_el('Rims', $brand, $model, $name, $data, 'fortochki');
            
             debug::log('---  continue parser rims fortochki  ---');
+        }
+
+        return true;
+    }
+
+    public static function checkScladForRims(array $data){
+        if(isset($data['rest_sk4'])){
+            return false;
         }
 
         return true;
@@ -125,4 +153,28 @@ class fortochki extends parsing {
 
     }
 
+    public static function getSclad(array $data){
+        $sclads = [
+            'ekb2' => '0',
+            'sk10' => '3',
+            'SKLAD12' => '5',
+            'sk19' => '6',
+            'yamka' => '7',
+            'sk2' => '10',
+            'sk3' => '10',
+            'sk7' => '11',
+            'sk18' => '13',
+            'sk4' => '15',
+        ];
+
+        foreach ($sclads as $sclad => $delivery){
+            if(isset($data['rest_'.$sclad])){
+                return ['tag' => $sclad, 'delivery' => $delivery];
+            }
+        }
+
+        return ['tag' => 'ekb2', 'delivery' => '0'];
+    }
 }
+
+
