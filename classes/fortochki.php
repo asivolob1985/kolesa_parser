@@ -93,6 +93,10 @@ class fortochki extends parsing {
     public function parsing_tyres($xml) {
         foreach ($xml->tires as $v) {
             debug::log($v, 'raw data');
+            $data = (array)$v;
+            if(!self::checkTovar($data)){
+                continue;
+            }
             $data = self::getDataForTyresForTochki($v);
             $brand = $data['brand'];
             $model = $data['model'];
@@ -114,6 +118,9 @@ class fortochki extends parsing {
         foreach ($xml->rims as $v) {
             debug::log($v);
             $data = (array)$v;
+            if(!self::checkTovar($data)){
+                continue;
+            }
             $checkSclad = self::checkScladForRims($data);
             if(!$checkSclad){
                 debug::log('пропуск элемента из-за склада');
@@ -142,6 +149,19 @@ class fortochki extends parsing {
         return true;
     }
 
+    public static function checkTovar(array $data){
+        $sclads = self::getSclads();
+        foreach($sclads as $sclad => $delivery){
+            $price_tag = 'price_'.$sclad.'_rozn';
+            if(isset($data[$price_tag])){
+                debug::log('---  good tovar fortochki  ---');
+                return true;
+            }
+        }
+        debug::log('---  bad tovar fortochki  ---');
+        return false;
+    }
+
     public static function revision_name($brand, $model, $name) {
         $new_name = $brand.' '.$model.' ';
         $name = str_replace(['(', ')', $brand, $model], '', $name);
@@ -154,6 +174,17 @@ class fortochki extends parsing {
     }
 
     public static function getSclad(array $data){
+        $sclads = self::getSclads();
+        foreach ($sclads as $sclad => $delivery){
+            if(isset($data['rest_'.$sclad])){
+                return ['tag' => $sclad, 'delivery' => $delivery];
+            }
+        }
+
+        return ['tag' => 'ekb2', 'delivery' => '0'];
+    }
+
+    public static function getSclads(){
         $sclads = [
             'ekb2' => '0',
             'sk10' => '3',
@@ -167,13 +198,7 @@ class fortochki extends parsing {
             'sk4' => '15',
         ];
 
-        foreach ($sclads as $sclad => $delivery){
-            if(isset($data['rest_'.$sclad])){
-                return ['tag' => $sclad, 'delivery' => $delivery];
-            }
-        }
-
-        return ['tag' => 'ekb2', 'delivery' => '0'];
+        return $sclads;
     }
 }
 
