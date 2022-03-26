@@ -78,7 +78,7 @@ class fortochki extends parsing {
             'cae'           => $value['cae'],
             'brand'         => mb_strtoupper(self::check_brands($value['brand'])),
             'model'         => mb_strtoupper($value['model']),
-            'img'           => $value['img_big_my'],
+            'img'           => $value['img_small'],
             'name'           => $value['name'],
             //доставка и цена
             'rrc'  => $rrc,
