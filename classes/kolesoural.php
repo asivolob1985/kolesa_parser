@@ -4,7 +4,7 @@ class kolesoural extends parsing {
 
     public $exclude_tyres = [];
 
-    public $pathData = 'http://www.koleso-ural.ru/price/Wheel%20XML%20Wheel_Vse_SLK_Baza_Partner%20%28XML%29.xml';
+    public $pathData = 'http://www.koleso-ural.ru/price/Wheel Wheel_Vse_SLK_Baza_Partner (XML).xml';
 
     public static function check_brands($brand) {
         $res = $brand;
