@@ -146,7 +146,7 @@ $telegram->message_to_telegram('parsing done, make xml');
 
 $ch = curl_init();
 // set URL and other appropriate options
-curl_setopt($ch, CURLOPT_URL, 'https://kolesamigom66.ru/y-market/index.php');
+curl_setopt($ch, CURLOPT_URL, 'https://kolesamigom66.ru/y-market/generate.php');
 curl_setopt($ch, CURLOPT_HEADER, 0);
 curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
