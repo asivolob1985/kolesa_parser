@@ -324,7 +324,7 @@ class process{
             $res = json_decode($kd);
             debug::log($res, 'getImage for kolesadarom');
             $res = (array)$res;
-            if($res['status'] == 403){
+            if($res['status'] == 403 or $res == '' or $res == false){
                 $url = '';
                 return '';
             }else{
