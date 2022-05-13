@@ -319,6 +319,7 @@ class process{
         }
         $imgid = '';
 	    if($site === 'kolesadarom'){
+            return ''; //проблема!
             $dataf = ['product_id' => $data['product_id']];
             $kd = kd::search('bDOdluITdq9oW405IK_qTfo9dOJYhmgK', $dataf);
             $res = json_decode($kd);
