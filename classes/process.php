@@ -319,14 +319,14 @@ class process{
         }
         $imgid = '';
 	    if($site === 'kolesadarom'){
-            return ''; //проблема!
-            $dataf = ['product_id' => $data['product_id']];
+            //return ''; //проблема!
+            debug::log($data['cae'], 'product_id for kolesadarom');
+            $dataf = ['product_id' => $data['cae']];
             $kd = kd::search('bDOdluITdq9oW405IK_qTfo9dOJYhmgK', $dataf);
             $res = json_decode($kd);
             debug::log($res, 'getImage for kolesadarom');
             $res = (array)$res;
             if($res['status'] == 403 or $res == '' or $res == false){
-                $url = '';
                 return '';
             }else{
                 $res = (array)$res[0];
