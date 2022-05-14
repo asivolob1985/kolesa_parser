@@ -319,7 +319,7 @@ class process{
         }
         $imgid = '';
 	    if($site === 'kolesadarom'){
-            //return ''; //проблема!
+            return ''; //проблема!
             debug::log($data['cae'], 'product_id for kolesadarom');
             $dataf = ['product_id' => $data['cae']];
             $kd = kd::search('bDOdluITdq9oW405IK_qTfo9dOJYhmgK', $dataf);
