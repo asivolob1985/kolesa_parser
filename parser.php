@@ -30,7 +30,7 @@ $start = microtime(true);
 $kolesadarom_process = true;
 $trektyre_process = false;//закрылся
 $fortochki_process = true;
-$kolesoural_process = true;
+$kolesoural_process = false;
 
 debug::clean();
 
