@@ -142,9 +142,9 @@ class fortochki extends parsing {
     }
 
     public static function checkScladForRims(array $data){
-        if(isset($data['rest_sk4'])){
-            return false;
-        }
+//        if(isset($data['rest_sk4'])){
+//            return false;
+//        }
 
         return true;
     }
