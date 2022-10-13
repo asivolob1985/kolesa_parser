@@ -1,17 +1,19 @@
 <?php
 
-class fortochki extends parsing {
+class fortochki extends parsing
+{
 
     public $exclude_tyres = [];
 
     public $pathData = 'https://b2b.4tochki.ru/export_data/M20382.xml';
 
-    public static function check_brands($brand) {
+    public static function check_brands($brand)
+    {
         $res = $brand;
         $ar = [
             'K&amp;K' => 'КиК',
-            'Kama' => 'НШЗ',
-            'K&K' => 'КиК',
+            'Kama'    => 'НШЗ',
+            'K&K'     => 'КиК',
 
         ];
 
@@ -23,7 +25,8 @@ class fortochki extends parsing {
         return $res;
     }
 
-    public static function getDataForTyresForTochki($value) {
+    public static function getDataForTyresForTochki($value)
+    {
         $value = (array)$value;
         $sclad_data = self::getSclad($value);
         $tag = $sclad_data['tag'];
@@ -35,29 +38,30 @@ class fortochki extends parsing {
         $rrc = $value['price_'.$tag.'_rozn'];
 
         $data = [
-            'width'       => $value['width'],
-            'height'      => $value['height'],
-            'diameter'    => properties::clean_diameter($value['diameter']),
-            'load_index'  => $value['load_index'],
-            'speed_index' => $value['speed_index'],
-            'season'      => $value['season'],
-            'thorn'       => $value['thorn'],
-            'cae'         => $value['cae'],
-            'brand'       => mb_strtoupper(self::check_brands($value['brand'])),
-            'model'       => mb_strtoupper($value['model']),
-            'img'         => $value['img_big_my'],
-            'name' =>  $value['name'],
+            'width'         => $value['width'],
+            'height'        => $value['height'],
+            'diameter'      => properties::clean_diameter($value['diameter']),
+            'load_index'    => $value['load_index'],
+            'speed_index'   => $value['speed_index'],
+            'season'        => $value['season'],
+            'thorn'         => $value['thorn'],
+            'cae'           => $value['cae'],
+            'brand'         => mb_strtoupper(self::check_brands($value['brand'])),
+            'model'         => mb_strtoupper($value['model']),
+            'img'           => $value['img_big_my'],
+            'name'          => $value['name'],
             //доставка и цена
-            'rrc'  => $rrc,
-            'sclad'       => $tag,
-            'rest'        => $count,//Конечный тег. он используется в системе и на сайте
+            'rrc'           => $rrc,
+            'sclad'         => $tag,
+            'rest'          => $count,//Конечный тег. он используется в системе и на сайте
             'delivery_days' => $delivery_days,
         ];
 
         return $data;
     }
 
-    public static function getDataForRimsForFortochki($value) {
+    public static function getDataForRimsForFortochki($value)
+    {
         $value = (array)$value;
         $sclad_data = self::getSclad($value);
         $tag = $sclad_data['tag'];
@@ -79,22 +83,23 @@ class fortochki extends parsing {
             'brand'         => mb_strtoupper(self::check_brands($value['brand'])),
             'model'         => mb_strtoupper($value['model']),
             'img'           => $value['img_small'],
-            'name'           => $value['name'],
+            'name'          => $value['name'],
             //доставка и цена
-            'rrc'  => $rrc,
-            'sclad'       => $tag,
-            'rest'        => $count,//Конечный тег. он используется в системе и на сайте
+            'rrc'           => $rrc,
+            'sclad'         => $tag,
+            'rest'          => $count,//Конечный тег. он используется в системе и на сайте
             'delivery_days' => $delivery_days,
         ];
 
         return $data;
     }
 
-    public function parsing_tyres($xml) {
+    public function parsing_tyres($xml)
+    {
         foreach ($xml->tires as $v) {
             debug::log($v, 'raw data');
             $data = (array)$v;
-            if(!self::checkTovar($data)){
+            if (!self::checkTovar($data)) {
                 continue;
             }
             $data = self::getDataForTyresForTochki($v);
@@ -107,22 +112,23 @@ class fortochki extends parsing {
             $name = self::revision_name($brand, $model, $name);
             $process = new process();
             $check_el = $process->check_and_add_el('Tires', $brand, $model, $name, $data, 'fortochki');
-           
+
             debug::log('---  continue parser tyres fortochki  ---');
         }
 
         return true;
     }
 
-    public function parsing_rims($xml) {
+    public function parsing_rims($xml)
+    {
         foreach ($xml->rims as $v) {
             debug::log($v);
             $data = (array)$v;
-            if(!self::checkTovar($data)){
+            if (!self::checkTovar($data)) {
                 continue;
             }
             $checkSclad = self::checkScladForRims($data);
-            if(!$checkSclad){
+            if (!$checkSclad) {
                 debug::log('пропуск элемента из-за склада');
                 continue;
             }
@@ -134,14 +140,15 @@ class fortochki extends parsing {
             $data = self::getDataForRimsForFortochki($v);
             $process = new process();
             $check_el = $process->check_and_add_el('Rims', $brand, $model, $name, $data, 'fortochki');
-           
+
             debug::log('---  continue parser rims fortochki  ---');
         }
 
         return true;
     }
 
-    public static function checkScladForRims(array $data){
+    public static function checkScladForRims(array $data)
+    {
 //        if(isset($data['rest_sk4'])){
 //            return false;
 //        }
@@ -149,20 +156,24 @@ class fortochki extends parsing {
         return true;
     }
 
-    public static function checkTovar(array $data){
+    public static function checkTovar(array $data)
+    {
         $sclads = self::getSclads();
-        foreach($sclads as $sclad => $delivery){
+        foreach ($sclads as $sclad => $delivery) {
             $price_tag = 'price_'.$sclad.'_rozn';
-            if(isset($data[$price_tag])){
+            if (isset($data[$price_tag])) {
                 debug::log('---  good tovar fortochki  ---');
+
                 return true;
             }
         }
         debug::log('---  bad tovar fortochki  ---');
+
         return false;
     }
 
-    public static function revision_name($brand, $model, $name) {
+    public static function revision_name($brand, $model, $name)
+    {
         $new_name = $brand.' '.$model.' ';
         $name = str_replace(['(', ')', $brand, $model], '', $name);
         $name = str_replace('№', '#', $name);
@@ -173,10 +184,11 @@ class fortochki extends parsing {
 
     }
 
-    public static function getSclad(array $data){
+    public static function getSclad(array $data)
+    {
         $sclads = self::getSclads();
-        foreach ($sclads as $sclad => $delivery){
-            if(isset($data['rest_'.$sclad])){
+        foreach ($sclads as $sclad => $delivery) {
+            if (isset($data['rest_'.$sclad])) {
                 return ['tag' => $sclad, 'delivery' => $delivery];
             }
         }
@@ -184,18 +196,39 @@ class fortochki extends parsing {
         return ['tag' => 'ekb2', 'delivery' => '0'];
     }
 
-    public static function getSclads(){
+    public static function getSclads()
+    {
+        //sclad - delivery, days
         $sclads = [
-            'ekb2' => '0',
-            'sk10' => '3',
-            'SKLAD12' => '5',
-            'sk19' => '6',
-            'yamka' => '7',
-            'sk2' => '10',
-            'sk3' => '10',
-            'sk7' => '11',
-            'sk18' => '13',
-            'sk4' => '15',
+            'ekb2'      => '0',
+            'sk10'      => '3',
+            'SKLAD12'   => '5',
+            'sk19'      => '6',
+            'yamka'     => '7',
+            'sk2'       => '10',
+            'sk3'       => '10',
+            'sk7'       => '11',
+            'sk18'      => '13',
+            'sk4'       => '15',
+            //
+            'tyumen'    => '4',
+            'tlt_new'   => '4',
+            'ufa_pish'  => '4',
+            'chelyab'   => '5',
+            'kaz_2'     => '5',
+            'samara2'   => '5',
+            'nn2_op'    => '6',
+            'vrnzh2'    => '7',
+            'RND2'      => '7',
+            'yar_pish3' => '7',
+            'mkrs'      => '8',
+            'prm'       => '8',
+            'kr_indust' => '8',
+            'spb_pish2' => '8',
+            'novosib2'  => '9',
+            'nvrs2'     => '9',
+            'ptgrsk2'   => '10',
+            'simf'      => '11',
         ];
 
         return $sclads;
